@@ -43,8 +43,20 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errorModel, HttpStatus.NOT_FOUND);
   }
 
+  @ExceptionHandler(NameInUseException.class)
+  public ResponseEntity<ErrorDetails> notFoundException(NameInUseException ex) {
+    ErrorDetails errorModel = new ErrorDetails(HttpStatus.NOT_ACCEPTABLE.value(), ex.getMessage());
+    return new ResponseEntity<>(errorModel, HttpStatus.NOT_ACCEPTABLE);
+  }
+
+  @ExceptionHandler(DataNascimentoException.class)
+  public ResponseEntity<ErrorDetails> dataNascimentoException(DataNascimentoException ex) {
+    ErrorDetails errorModel = new ErrorDetails(HttpStatus.NOT_ACCEPTABLE.value(), ex.getMessage());
+    return new ResponseEntity<>(errorModel, HttpStatus.NOT_ACCEPTABLE);
+  }
+
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<?> globleExcpetionHandler(Exception ex) {
+  public ResponseEntity<?> globalExcpetionHandler(Exception ex) {
     ErrorDetails errorModel = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR.value(),
         ex.getLocalizedMessage());
     return new ResponseEntity<>(errorModel, HttpStatus.INTERNAL_SERVER_ERROR);

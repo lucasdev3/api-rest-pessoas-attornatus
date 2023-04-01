@@ -11,7 +11,6 @@ import br.com.lucasdev3.api.services.PessoaService;
 import br.com.lucasdev3.api.services.ValidacaoPessoaService;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +43,12 @@ public class PessoaServiceImpl implements PessoaService {
 
   @Override
   public ListarPessoaModel buscaPorId(Long id) {
-    Pessoa pessoa = this.pessoaRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
+    Pessoa pessoa = getPessoa(id);
     return new ListarPessoaModel(pessoa);
   }
 
   @Override
-  public void salvar(@Valid SalvarPessoaModel salvarPessoaModel) {
+  public void salvar(SalvarPessoaModel salvarPessoaModel) {
     validacaoPessoaServiceList.forEach(v -> {
       v.validacao(pessoaRepository, salvarPessoaModel);
     });
@@ -59,22 +57,30 @@ public class PessoaServiceImpl implements PessoaService {
   }
 
   @Override
-  public void atualizar(@Valid SalvarPessoaModel salvarPessoaModel, Long id) {
+  public void atualizar(SalvarPessoaModel salvarPessoaModel, Long id) {
     validacaoPessoaServiceList.forEach(v -> {
       v.validacao(pessoaRepository, salvarPessoaModel);
     });
-    Pessoa pessoa = this.pessoaRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
+    Pessoa pessoa = getPessoa(id);
     pessoa.update(salvarPessoaModel);
     this.pessoaRepository.save(pessoa);
   }
 
   @Override
-  public void adicionarEndereco(@Valid SalvarEnderecoModel salvarEnderecoModel, Long id) {
-    Pessoa pessoa = this.pessoaRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
+  public void adicionarEndereco(SalvarEnderecoModel salvarEnderecoModel, Long id) {
+    Pessoa pessoa = getPessoa(id);
     pessoa.getEnderecos().add(new Endereco(salvarEnderecoModel));
     this.pessoaRepository.save(pessoa);
+  }
+
+  public void deletar(Long id) {
+    Pessoa pessoa = getPessoa(id);
+    pessoaRepository.delete(pessoa);
+  }
+
+  private Pessoa getPessoa(Long id) {
+    return this.pessoaRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
   }
 
 }

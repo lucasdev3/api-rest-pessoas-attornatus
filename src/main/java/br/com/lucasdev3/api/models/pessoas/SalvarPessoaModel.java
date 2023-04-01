@@ -20,7 +20,8 @@ public class SalvarPessoaModel extends GenericModel {
   private String nome;
 
   @NotBlank(message = "data de nascimento é obrigatorio")
-  @Pattern(regexp = "^\\d{2}-\\d{2}-\\d{4}$", message = "data de nascimento não obedece ao padrao dd-MM-yyyy")
+  @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Data de nascimento inválida. O formato deve ser dd/MM/yyyy")
+
   private String dataNascimento;
 
   @NotNull(message = "endereco é obrigatorio")

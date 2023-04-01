@@ -8,14 +8,16 @@ import javax.validation.Valid;
 
 public interface PessoaService {
 
-  public List<ListarPessoaModel> buscar();
+  List<ListarPessoaModel> buscar();
 
-  public ListarPessoaModel buscaPorId(Long id);
+  ListarPessoaModel buscaPorId(Long id);
 
-  public void salvar(SalvarPessoaModel salvarPessoaModel);
+  void salvar(SalvarPessoaModel salvarPessoaModel);
 
-  public void atualizar(SalvarPessoaModel salvarPessoaModel, Long id);
+  void atualizar(SalvarPessoaModel salvarPessoaModel, Long id);
 
-  public void adicionarEndereco(@Valid SalvarEnderecoModel salvarEnderecoModel, Long id);
+  void adicionarEndereco(SalvarEnderecoModel salvarEnderecoModel, Long id);
+
+  void deletar(Long id);
 
 }

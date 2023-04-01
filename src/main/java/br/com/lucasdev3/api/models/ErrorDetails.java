@@ -9,9 +9,9 @@ import lombok.ToString;
 @ToString
 public class ErrorDetails {
 
-  private Integer status;
+  private final Integer status;
 
-  private Object message;
+  private final Object message;
 
   public ErrorDetails(Integer status, String message) {
 
