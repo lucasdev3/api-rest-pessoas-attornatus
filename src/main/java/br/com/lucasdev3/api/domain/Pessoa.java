@@ -1,10 +1,10 @@
 package br.com.lucasdev3.api.domain;
 
+import static br.com.lucasdev3.api.utils.DateUtils.dateNow;
+
 import br.com.lucasdev3.api.models.pessoas.SalvarPessoaModel;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -16,7 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -54,15 +53,18 @@ public class Pessoa implements Serializable {
     this.nome = dto.getNome();
     this.dataNascimento = dto.getDataNascimento();
     this.enderecos = dto.getEnderecos().stream().map(Endereco::new).collect(Collectors.toList());
-    this.dataCriacao = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new Date());
-    this.dataAtualizacao = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new Date());
+    this.dataCriacao = dateNow();
+    this.dataAtualizacao = dateNow();
   }
 
   public void update(SalvarPessoaModel dto) {
     this.nome = dto.getNome();
     this.dataNascimento = dto.getDataNascimento();
     this.enderecos = dto.getEnderecos().stream().map(Endereco::new).collect(Collectors.toList());
-    this.dataAtualizacao = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new Date());
+    this.enderecos.forEach(endereco -> {
+      endereco.setDataAtualizacao(dateNow());
+    });
+    this.dataAtualizacao = dateNow();
   }
 
   @Override

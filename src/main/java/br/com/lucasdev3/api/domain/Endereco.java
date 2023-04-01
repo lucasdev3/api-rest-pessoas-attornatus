@@ -1,9 +1,9 @@
 package br.com.lucasdev3.api.domain;
 
+import static br.com.lucasdev3.api.utils.DateUtils.dateNow;
+
 import br.com.lucasdev3.api.models.endereco.SalvarEnderecoModel;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,6 +41,9 @@ public class Endereco implements Serializable {
   @Pattern(regexp = "^\\d{1,5}$", message = "numero não obedece ao padrao determinado. Deve estar entre 1 e 99999")
   private String numero;
 
+  @Column(name = "enderecoPrincipal")
+  private Boolean enderecoPrincipal = false;
+
   @Column(name = "data_criacao", nullable = false, updatable = false)
   private String dataCriacao;
 
@@ -51,8 +54,8 @@ public class Endereco implements Serializable {
     this.logradouro = salvarEnderecoModel.getLogradouro();
     this.cep = salvarEnderecoModel.getCep();
     this.numero = salvarEnderecoModel.getNumero();
-    this.dataCriacao = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new Date());
-    this.dataAtualizacao = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new Date());
+    this.dataCriacao = dateNow();
+    this.dataAtualizacao = dateNow();
   }
 
 }

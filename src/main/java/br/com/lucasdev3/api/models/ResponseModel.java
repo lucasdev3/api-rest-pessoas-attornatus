@@ -1,7 +1,7 @@
 package br.com.lucasdev3.api.models;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import static br.com.lucasdev3.api.utils.DateUtils.dateNow;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseModel extends GenericModel {
 
-  private final String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new Date());
+  private final String date = dateNow();
 
   private Object data;
 

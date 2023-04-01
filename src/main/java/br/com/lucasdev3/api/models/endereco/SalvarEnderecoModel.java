@@ -16,4 +16,6 @@ public class SalvarEnderecoModel extends GenericModel {
 
   private String numero;
 
+  private Boolean enderecoPrincipal = false;
+
 }

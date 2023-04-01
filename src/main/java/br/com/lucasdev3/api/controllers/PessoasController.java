@@ -38,6 +38,11 @@ public class PessoasController {
     return ResponseEntity.ok(new ResponseModel(this.pessoaService.buscaPorId(id)));
   }
 
+  @GetMapping("/enderecos/{pessoaId}")
+  public ResponseEntity<ResponseModel> buscaEnderecos(@PathVariable Long pessoaId) {
+    return ResponseEntity.ok(new ResponseModel(this.pessoaService.buscaEnderecos(pessoaId)));
+  }
+
   @PostMapping("/salvar")
   public ResponseEntity<ResponseModel> salvar(@Valid @RequestBody SalvarPessoaModel salvarPessoaModel) {
     this.pessoaService.salvar(salvarPessoaModel);
@@ -57,6 +62,13 @@ public class PessoasController {
       @PathVariable Long id) {
     this.pessoaService.adicionarEndereco(salvarEnderecoModel, id);
     return new ResponseEntity<>(new ResponseModel("Endereço adicionado com sucesso!"),
+        HttpStatus.OK);
+  }
+
+  @PutMapping("/definir-endereco-principal/{pessoaId}/{enderecoId}")
+  public ResponseEntity<ResponseModel> definirEnderecoPrincipal(@PathVariable Long pessoaId, @PathVariable Long enderecoId) {
+    this.pessoaService.definirEnderecoPrincipal(pessoaId, enderecoId);
+    return new ResponseEntity<>(new ResponseModel("Endereço principal definido com sucesso!"),
         HttpStatus.OK);
   }
 
