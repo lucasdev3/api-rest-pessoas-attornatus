@@ -91,17 +91,17 @@ public class PessoaServiceImpl implements PessoaService {
     Pessoa pessoa = getPessoa(pessoaId);
     List<Endereco> enderecos = pessoa.getEnderecos();
     enderecos.forEach(endereco -> {
-      if(endereco.getEnderecoPrincipal()) {
+      if (endereco.getEnderecoPrincipal()) {
         // se for o mesmo da busca já está true então não faz nada
         // se for diferente então vai colocar false
-        if(!Objects.equals(enderecoId, endereco.getId())) {
+        if (!Objects.equals(enderecoId, endereco.getId())) {
           endereco.setEnderecoPrincipal(Boolean.FALSE);
-        }else {
+        } else {
           enderecoEncontrado.set(true);
         }
-      }else {
+      } else {
         // se for o mesmo da busca
-        if(Objects.equals(enderecoId, endereco.getId())) {
+        if (Objects.equals(enderecoId, endereco.getId())) {
           endereco.setEnderecoPrincipal(Boolean.TRUE);
           enderecoEncontrado.set(true);
         }
@@ -110,7 +110,7 @@ public class PessoaServiceImpl implements PessoaService {
     if (enderecoEncontrado.get()) {
       pessoa.setEnderecos(enderecos);
       pessoaRepository.save(pessoa);
-    }else {
+    } else {
       throw new NotFoundException("Nenhum endereco foi encontrado com esse ID");
     }
 

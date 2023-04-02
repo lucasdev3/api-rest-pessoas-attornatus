@@ -44,21 +44,24 @@ public class PessoasController {
   }
 
   @PostMapping("/salvar")
-  public ResponseEntity<ResponseModel> salvar(@Valid @RequestBody SalvarPessoaModel salvarPessoaModel) {
+  public ResponseEntity<ResponseModel> salvar(
+      @Valid @RequestBody SalvarPessoaModel salvarPessoaModel) {
     this.pessoaService.salvar(salvarPessoaModel);
     return new ResponseEntity<>(new ResponseModel("Pessoa criada com sucesso!"),
         HttpStatus.CREATED);
   }
 
   @PutMapping("/atualizar/{id}")
-  public ResponseEntity<ResponseModel> atualizar(@Valid @RequestBody SalvarPessoaModel salvarPessoaModel,
+  public ResponseEntity<ResponseModel> atualizar(
+      @Valid @RequestBody SalvarPessoaModel salvarPessoaModel,
       @PathVariable Long id) {
     this.pessoaService.atualizar(salvarPessoaModel, id);
     return new ResponseEntity<>(new ResponseModel("Pessoa atualizada com sucesso!"), HttpStatus.OK);
   }
 
   @PutMapping("/adicionar-endereco/{id}")
-  public ResponseEntity<ResponseModel> adicionarEndereco(@Valid @RequestBody SalvarEnderecoModel salvarEnderecoModel,
+  public ResponseEntity<ResponseModel> adicionarEndereco(
+      @Valid @RequestBody SalvarEnderecoModel salvarEnderecoModel,
       @PathVariable Long id) {
     this.pessoaService.adicionarEndereco(salvarEnderecoModel, id);
     return new ResponseEntity<>(new ResponseModel("Endereço adicionado com sucesso!"),
@@ -66,7 +69,8 @@ public class PessoasController {
   }
 
   @PutMapping("/definir-endereco-principal/{pessoaId}/{enderecoId}")
-  public ResponseEntity<ResponseModel> definirEnderecoPrincipal(@PathVariable Long pessoaId, @PathVariable Long enderecoId) {
+  public ResponseEntity<ResponseModel> definirEnderecoPrincipal(@PathVariable Long pessoaId,
+      @PathVariable Long enderecoId) {
     this.pessoaService.definirEnderecoPrincipal(pessoaId, enderecoId);
     return new ResponseEntity<>(new ResponseModel("Endereço principal definido com sucesso!"),
         HttpStatus.OK);

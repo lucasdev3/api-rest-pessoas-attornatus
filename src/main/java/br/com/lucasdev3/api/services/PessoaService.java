@@ -6,7 +6,6 @@ import br.com.lucasdev3.api.models.pessoas.ListarPessoaModel;
 import br.com.lucasdev3.api.models.pessoas.SalvarPessoaModel;
 import java.util.List;
 import java.util.Map;
-import javax.validation.Valid;
 
 public interface PessoaService {
 

@@ -11,8 +11,11 @@
 * Spring Boot
 * JPA
 * JDBC
+* SOLID
+* Design Patterns
 * Oracle DB, MySQL, PostgresSQL
 * Linux
+* Shell Script
 * Git e CVS
 * Javascript
 
@@ -59,13 +62,13 @@ Uma Pessoa deve ter os seguintes campos
 * Maven 3.8.6.
 * Banco de dados H2 (em memória) versão 1.4.193.
 * Spring Boot 2.7.2
+* SOLID
+* TDD
 * JPA para persistencia e manipulação de dados.
 * Bean validation para validações de atributos com validação global do tipo
   'MethodArgumentNotValidException'.
 * Swagger para documentação e testes de requisições na API disponivel na
   url: http://localhost:8080/swagger-ui/
-* Log4j para logs em runtime e criação de um arquivo de logs no diretorio:
-  ```/tmp/logs/attornatus.log```
 * JUnit para testes unitários
 
 #### Pontos de atenção
@@ -73,20 +76,20 @@ Uma Pessoa deve ter os seguintes campos
 * Verifique a versão do Java
 * Verifique a versão do Maven
 * Verifique a versão do Spring Boot
-* Verifique a existencia do diretório de logs do Log4j. Caso a aplicação não crie automaticamente,
-  crie-o manualmente (mais informações no arquivo log4j.properties no pacote de resources projeto).
 * A API fica em execução na porta 8080 local. Garanta que a mesma esteja livre para subir a aplicação.
     * Compilar projeto e gerar artefato no target:
       ``` mvn clean package ```
 
 
-![img.png](img.png)
+![img_1.png](img_1.png)
+
+![img_2.png](img_2.png)
 
 
-* Artefato gerado no diretório ```api-rest-avaliacao-dev-backend-attornatus\target``` dentro do projeto.
+* Artefato gerado no diretório ```/target``` dentro do projeto.
 
 * Execução via terminal
-    * Abra o diretório do artefato e execute o seguinte comando:  ```java -jar api-rest-avaliacao-dev-backend-0.0.1-SNAPSHOT.jar```
+    * Abra o diretório do artefato e execute o seguinte comando:  ```java -jar api-rest-pessoas-attornatus-0.0.1-SNAPSHOT.jar```
 
 #### Base de Dados H2
 http://localhost:8080/h2-console/
@@ -98,71 +101,86 @@ http://localhost:8080/swagger-ui/
 
 * Não é possivel ter mais de uma pessoa com o mesmo nome no banco.
 * Não é possivel cadastrar/atualizar uma pessoa no banco sem a lista de endereços
-* Não é possivel cadastrar/atualizar uma pessoa sem ter ao menos um endereço com o atributo
-  'enderecoPrincipal' com valor 'true (boolean)'.
 
 #### Exemplo de cadastro de pessoa — PessoaDTO
 
 * Metodo: POST - Rota: /pessoas/salvar
-* JSON a ser enviado:
-    ```
-    {
-        "nome": "teste44",
-        "dataNascimento": "20-06-1996",
-        "enderecos": [
-            {
-                "logradouro": "teste4",
-                "cep": "12372-120",
-                "numero": "44",
-                "enderecoPrincipal": false
-            },
-            {
-                "logradouro": "teste44",
-                "cep": "12372-120",
-                "numero": "55",
-                "enderecoPrincipal": true
-            }
-        ]
-    }
-    ```
-* JSON de resposta — Exemplo de sucesso (200 - Ok):
-    ```
-    {
-      "date": "17/02/2023 01:50:43:271",
-      "message": "Pessoa cadastrada com sucesso!"
-    }
-    ```
-* JSON de resposta — Exemplo de falha (400 - BadRequest):
-  ```
-    {
-      "date": "17/02/2023 01:52:07:430",
-      "message": "Nome já cadastrado no banco!"
-    }
-  ```
+  * JSON a ser enviado:
+      ```
+      {
+          "nome": "Teste 1",
+          "dataNascimento": "10/04/2020",
+          "enderecos": [
+              {
+                  "logradouro": "teste4",
+                  "cep": "12440-230",
+                  "numero": "44",
+              },
+              {
+                  "logradouro": "teste454545",
+                  "cep": "12440-230",
+                  "numero": "44",
+              }
+          ]
+      }
+      ```
+    * JSON de resposta — Exemplo de sucesso (201 - CREATED):
+        ```
+        {
+          "date": "01/04/2023 14:23:10:986",
+          "data": "Pessoa criada com sucesso!"
+        }
+        ```
+    * JSON de resposta — Exemplo de falha (406 - Not Acceptable):
+      ```
+        { 
+          "status": 406,
+          "message": "Nome já está sendo utilizado!"
+        }
+      ```
 
 #### Exemplo de listagem de pessoas
 
 * Metodo: GET - Rota: /pessoas
-    * Retorno:
-      ```
-      [
-        {
-            "nome": "teste44",
-            "dataNascimento": "20-06-1996",
-            "enderecos": [
-                {
-                    "logradouro": "teste4",
-                    "cep": "12372-120",
-                    "numero": "44",
-                    "enderecoPrincipal": false
-                },
-                {
-                    "logradouro": "teste44",
-                    "cep": "12372-120",
-                    "numero": "55",
-                    "enderecoPrincipal": true
-                }
-            ]
-        }
-      ]
-      ```
+* Retorno:
+  ```
+  {
+    "date": "01/04/2023 14:23:52:863",
+    "data": [
+      {
+        "id": 1,
+        "nome": "Teste 1",
+        "dataNascimento": "10/04/2020",
+        "enderecos": [
+          {
+            "id": 1,
+            "logradouro": "teste4",
+            "cep": "12440-230",
+            "numero": "44",
+            "enderecoPrincipal": true,
+            "dataCriacao": "01/04/2023 14:23:10:970",
+            "dataAtualizacao": "01/04/2023 14:23:10:970"
+          },
+          {
+            "id": 2,
+            "logradouro": "teste454545",
+            "cep": "12440-230",
+            "numero": "44",
+            "enderecoPrincipal": false,
+            "dataCriacao": "01/04/2023 14:23:29:745",
+            "dataAtualizacao": "01/04/2023 14:23:29:745"
+          }
+        ],
+        "dataCriacao": "01/04/2023 14:23:10:972",
+        "dataAtualizacao": "01/04/2023 14:23:10:972"
+      }
+    ]
+  }
+  ```
+  
+#### Exemplo no banco de dados
+
+#![img.png](img.png)
+
+
+
