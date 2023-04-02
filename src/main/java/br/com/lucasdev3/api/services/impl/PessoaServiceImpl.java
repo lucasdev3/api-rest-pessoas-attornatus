@@ -92,7 +92,7 @@ public class PessoaServiceImpl implements PessoaService {
     List<Endereco> enderecos = pessoa.getEnderecos();
     enderecos.forEach(endereco -> {
       if (endereco.getEnderecoPrincipal()) {
-        // se for o mesmo da busca já está true então não faz nada
+        // se for o mesmo da busca já está true então nenhuma ação é realizada
         // se for diferente então vai colocar false
         if (!Objects.equals(enderecoId, endereco.getId())) {
           endereco.setEnderecoPrincipal(Boolean.FALSE);
@@ -100,7 +100,7 @@ public class PessoaServiceImpl implements PessoaService {
           enderecoEncontrado.set(true);
         }
       } else {
-        // se for o mesmo da busca
+        // se for o mesmo da busca troca o estada para true
         if (Objects.equals(enderecoId, endereco.getId())) {
           endereco.setEnderecoPrincipal(Boolean.TRUE);
           enderecoEncontrado.set(true);

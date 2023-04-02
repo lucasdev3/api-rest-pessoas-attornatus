@@ -7,6 +7,7 @@ import br.com.lucasdev3.api.models.pessoas.SalvarPessoaModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,6 +70,42 @@ class PessoaRepositoryTest {
 
     Assertions.assertThat(pessoaAtualizada.getEnderecos()).isEqualTo(pessoaSalva.getEnderecos());
 
+  }
+
+  @Test
+  @DisplayName("Deletando pessoa quando sucesso")
+  void deletar_pessoa_quando_sucesso() {
+
+    Pessoa pessoa = createPessoa();
+
+    Pessoa pessoaSalva = this.pessoaRepository.save(pessoa);
+
+    this.pessoaRepository.delete(pessoaSalva);
+
+    Optional<Pessoa> pessoaOptional = this.pessoaRepository.findById(pessoaSalva.getId());
+
+    Assertions.assertThat(pessoaOptional.isEmpty()).isTrue();
+
+  }
+
+  @Test
+  @DisplayName("Listando pessoa pelo id quando sucesso")
+  void busca_pessoa_pelo_id_quando_sucesso() {
+
+    Pessoa pessoa = createPessoa();
+
+    Pessoa pessoaSalva = this.pessoaRepository.save(pessoa);
+
+    Optional<Pessoa> pessoaEncontradaOptional = this.pessoaRepository.findById(pessoaSalva.getId());
+
+    Assertions.assertThat(pessoaEncontradaOptional.isEmpty()).isFalse();
+
+    Assertions.assertThat(pessoaEncontradaOptional.get().getNome()).isEqualTo(pessoaSalva.getNome());
+
+    Assertions.assertThat(pessoaEncontradaOptional.get().getDataNascimento()).isEqualTo(pessoaSalva.getDataNascimento());
+
+    Assertions.assertThat(pessoaEncontradaOptional.get().getEnderecos()).isEqualTo(pessoaSalva.getEnderecos());
+    
   }
 
 
