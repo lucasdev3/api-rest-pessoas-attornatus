@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ResponseModel extends GenericModel {
+public class ResponseModel<T> extends GenericModel {
 
   private final String date = dateNow();
 
-  private Object data;
+  private T data;
 
-  public ResponseModel(Object data) {
+  public ResponseModel(T data) {
     this.data = data;
   }
 }

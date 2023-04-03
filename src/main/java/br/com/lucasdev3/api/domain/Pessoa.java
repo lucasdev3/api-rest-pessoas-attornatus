@@ -16,6 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,12 +38,17 @@ public class Pessoa implements Serializable {
   private Long id;
 
   @Column(name = "nome", unique = true)
+  @NotBlank(message = "nome é obrigatorio")
   private String nome;
 
   @Column(name = "data_nascimento")
+  @NotBlank(message = "data de nascimento é obrigatorio")
+  @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$", message = "Data de nascimento inválida. O formato deve ser dd/MM/yyyy")
   private String dataNascimento;
 
   @OneToMany(cascade = CascadeType.ALL)
+  @NotNull(message = "endereco é obrigatorio")
+  @Valid
   private List<Endereco> enderecos = new ArrayList<>();
 
   @Column(name = "data_criacao", nullable = false, updatable = false)

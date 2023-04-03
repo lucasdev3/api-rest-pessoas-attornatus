@@ -1,9 +1,13 @@
 package br.com.lucasdev3.api.controllers;
 
+import br.com.lucasdev3.api.domain.Endereco;
 import br.com.lucasdev3.api.models.ResponseModel;
 import br.com.lucasdev3.api.models.endereco.SalvarEnderecoModel;
+import br.com.lucasdev3.api.models.pessoas.ListarPessoaModel;
 import br.com.lucasdev3.api.models.pessoas.SalvarPessoaModel;
 import br.com.lucasdev3.api.services.PessoaService;
+import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,57 +33,57 @@ public class PessoasController {
   }
 
   @GetMapping
-  public ResponseEntity<ResponseModel> buscar() {
-    return ResponseEntity.ok(new ResponseModel(this.pessoaService.buscar()));
+  public ResponseEntity<ResponseModel<List<ListarPessoaModel>>> buscar() {
+    return ResponseEntity.ok(new ResponseModel<>(this.pessoaService.buscar()));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ResponseModel> buscaPorId(@PathVariable Long id) {
-    return ResponseEntity.ok(new ResponseModel(this.pessoaService.buscaPorId(id)));
+  public ResponseEntity<ResponseModel<ListarPessoaModel>> buscaPorId(@PathVariable Long id) {
+    return ResponseEntity.ok(new ResponseModel<>(this.pessoaService.buscaPorId(id)));
   }
 
   @GetMapping("/enderecos/{pessoaId}")
-  public ResponseEntity<ResponseModel> buscaEnderecos(@PathVariable Long pessoaId) {
-    return ResponseEntity.ok(new ResponseModel(this.pessoaService.buscaEnderecos(pessoaId)));
+  public ResponseEntity<ResponseModel<Map<String, List<Endereco>>>> buscaEnderecos(@PathVariable Long pessoaId) {
+    return ResponseEntity.ok(new ResponseModel<>(this.pessoaService.buscaEnderecos(pessoaId)));
   }
 
   @PostMapping("/salvar")
-  public ResponseEntity<ResponseModel> salvar(
+  public ResponseEntity<ResponseModel<String>> salvar(
       @Valid @RequestBody SalvarPessoaModel salvarPessoaModel) {
     this.pessoaService.salvar(salvarPessoaModel);
-    return new ResponseEntity<>(new ResponseModel("Pessoa criada com sucesso!"),
+    return new ResponseEntity<>(new ResponseModel<>("Pessoa criada com sucesso!"),
         HttpStatus.CREATED);
   }
 
   @PutMapping("/atualizar/{id}")
-  public ResponseEntity<ResponseModel> atualizar(
+  public ResponseEntity<ResponseModel<String>> atualizar(
       @Valid @RequestBody SalvarPessoaModel salvarPessoaModel,
       @PathVariable Long id) {
     this.pessoaService.atualizar(salvarPessoaModel, id);
-    return new ResponseEntity<>(new ResponseModel("Pessoa atualizada com sucesso!"), HttpStatus.OK);
+    return new ResponseEntity<>(new ResponseModel<>("Pessoa atualizada com sucesso!"), HttpStatus.OK);
   }
 
   @PutMapping("/adicionar-endereco/{id}")
-  public ResponseEntity<ResponseModel> adicionarEndereco(
+  public ResponseEntity<ResponseModel<String>> adicionarEndereco(
       @Valid @RequestBody SalvarEnderecoModel salvarEnderecoModel,
       @PathVariable Long id) {
     this.pessoaService.adicionarEndereco(salvarEnderecoModel, id);
-    return new ResponseEntity<>(new ResponseModel("Endereço adicionado com sucesso!"),
+    return new ResponseEntity<>(new ResponseModel<>("Endereço adicionado com sucesso!"),
         HttpStatus.OK);
   }
 
   @PutMapping("/definir-endereco-principal/{pessoaId}/{enderecoId}")
-  public ResponseEntity<ResponseModel> definirEnderecoPrincipal(@PathVariable Long pessoaId,
+  public ResponseEntity<ResponseModel<String>> definirEnderecoPrincipal(@PathVariable Long pessoaId,
       @PathVariable Long enderecoId) {
     this.pessoaService.definirEnderecoPrincipal(pessoaId, enderecoId);
-    return new ResponseEntity<>(new ResponseModel("Endereço principal definido com sucesso!"),
+    return new ResponseEntity<>(new ResponseModel<>("Endereço principal definido com sucesso!"),
         HttpStatus.OK);
   }
 
   @DeleteMapping("/delete/{id}")
-  public ResponseEntity<ResponseModel> deletar(@PathVariable Long id) {
+  public ResponseEntity<ResponseModel<String>> deletar(@PathVariable Long id) {
     this.pessoaService.deletar(id);
-    return new ResponseEntity<>(new ResponseModel("Pessoa deletada"), HttpStatus.OK);
+    return new ResponseEntity<>(new ResponseModel<>("Pessoa deletada"), HttpStatus.OK);
   }
 
 }

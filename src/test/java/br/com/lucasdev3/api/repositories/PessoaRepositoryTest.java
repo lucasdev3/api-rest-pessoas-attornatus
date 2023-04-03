@@ -1,13 +1,15 @@
 package br.com.lucasdev3.api.repositories;
 
+import static br.com.lucasdev3.api.utils.ConstrucaoPessoa.createPessoa;
+import static br.com.lucasdev3.api.utils.ConstrucaoPessoa.createPessoaVazia;
+
 import br.com.lucasdev3.api.domain.Endereco;
 import br.com.lucasdev3.api.domain.Pessoa;
 import br.com.lucasdev3.api.models.endereco.SalvarEnderecoModel;
-import br.com.lucasdev3.api.models.pessoas.SalvarPessoaModel;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +68,8 @@ class PessoaRepositoryTest {
 
     Assertions.assertThat(pessoaAtualizada.getNome()).isEqualTo(pessoaSalva.getNome());
 
-    Assertions.assertThat(pessoaAtualizada.getDataNascimento()).isEqualTo(pessoaSalva.getDataNascimento());
+    Assertions.assertThat(pessoaAtualizada.getDataNascimento())
+        .isEqualTo(pessoaSalva.getDataNascimento());
 
     Assertions.assertThat(pessoaAtualizada.getEnderecos()).isEqualTo(pessoaSalva.getEnderecos());
 
@@ -100,23 +103,26 @@ class PessoaRepositoryTest {
 
     Assertions.assertThat(pessoaEncontradaOptional.isEmpty()).isFalse();
 
-    Assertions.assertThat(pessoaEncontradaOptional.get().getNome()).isEqualTo(pessoaSalva.getNome());
+    Assertions.assertThat(pessoaEncontradaOptional.get().getNome())
+        .isEqualTo(pessoaSalva.getNome());
 
-    Assertions.assertThat(pessoaEncontradaOptional.get().getDataNascimento()).isEqualTo(pessoaSalva.getDataNascimento());
+    Assertions.assertThat(pessoaEncontradaOptional.get().getDataNascimento())
+        .isEqualTo(pessoaSalva.getDataNascimento());
 
-    Assertions.assertThat(pessoaEncontradaOptional.get().getEnderecos()).isEqualTo(pessoaSalva.getEnderecos());
-    
+    Assertions.assertThat(pessoaEncontradaOptional.get().getEnderecos())
+        .isEqualTo(pessoaSalva.getEnderecos());
+
   }
 
+  @Test
+  @DisplayName("Lancando exception ConstraintViolationException quando field não for valida")
+  void lancando_exception_ConstraintViolationException_quando_sucesso() {
 
-  private Pessoa createPessoa() {
-    SalvarEnderecoModel enderecoModel1 = new SalvarEnderecoModel("teste", "41232-333", "33",
-        true);
-    SalvarEnderecoModel enderecoModel2 = new SalvarEnderecoModel("teste2", "66666-555", "77",
-        false);
-    SalvarPessoaModel salvarPessoaModel = new SalvarPessoaModel("Lucas", "20/06/1996",
-        Arrays.asList(enderecoModel1, enderecoModel2));
-    return new Pessoa(salvarPessoaModel);
+    Pessoa pessoa = createPessoaVazia();
+
+    Assertions.assertThatThrownBy(() -> this.pessoaRepository.save(pessoa))
+        .isInstanceOf(ConstraintViolationException.class);
+
   }
 
 }

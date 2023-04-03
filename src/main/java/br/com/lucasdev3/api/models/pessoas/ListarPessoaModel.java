@@ -5,10 +5,12 @@ import br.com.lucasdev3.api.domain.Pessoa;
 import br.com.lucasdev3.api.models.GenericModel;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class ListarPessoaModel extends GenericModel {
