@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.PostPersist;
 import javax.persistence.PostUpdate;
@@ -25,45 +26,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "TB_PESSOAS")
+@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
-public class Pessoa extends GenericEntity{
+public class GenericEntity implements Serializable {
 
-  @Column(name = "nome", unique = true)
-  @NotBlank(message = "nome é obrigatorio")
-  private String nome;
+  private static final long serialVersionUID = 1L;
 
-  @Column(name = "data_nascimento")
-  @NotBlank(message = "data de nascimento é obrigatorio")
-  private String dataNascimento;
-
-  @OneToMany(cascade = CascadeType.ALL)
-  @NotNull(message = "endereco é obrigatorio")
-  @Valid
-  private List<Endereco> enderecos = new ArrayList<>();
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Column(name = "data_criacao", nullable = false, updatable = false)
   private String dataCriacao = dateNow();
 
   @Column(name = "data_atualizacao", nullable = false)
   private String dataAtualizacao = dateNow();
-  ;
 
-
-  public Pessoa(SalvarPessoaModel dto) {
-    this.nome = dto.getNome();
-    this.dataNascimento = dto.getDataNascimento();
-    this.enderecos = dto.getEnderecos().stream().map(Endereco::new).collect(Collectors.toList());
-  }
-
-  public void update(SalvarPessoaModel dto) {
-    this.nome = dto.getNome();
-    this.dataNascimento = dto.getDataNascimento();
-    this.enderecos = dto.getEnderecos().stream().map(Endereco::new).collect(Collectors.toList());
-  }
 
   @PostPersist
   public void postPersist() {
@@ -75,23 +55,6 @@ public class Pessoa extends GenericEntity{
   public void postUpdate() {
     System.out.println("Data de atualização atualizada - Pessoas");
     this.dataAtualizacao = dateNow();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Pessoa pessoa = (Pessoa) o;
-    return Objects.equals(enderecos, pessoa.enderecos);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(enderecos);
   }
 
 }

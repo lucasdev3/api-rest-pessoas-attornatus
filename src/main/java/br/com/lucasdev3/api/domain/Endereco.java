@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -21,13 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Endereco implements Serializable {
-
-  private static final long serialVersionUID = 1L;
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class Endereco extends GenericEntity {
 
   @NotBlank(message = "logradouro não pode ser nulo")
   private String logradouro;
@@ -45,16 +41,27 @@ public class Endereco implements Serializable {
   private Boolean enderecoPrincipal = false;
 
   @Column(name = "data_criacao", nullable = false, updatable = false)
-  private String dataCriacao;
+  private String dataCriacao = dateNow();
 
   @Column(name = "data_atualizacao", nullable = false)
-  private String dataAtualizacao;
+  private String dataAtualizacao = dateNow();
+
 
   public Endereco(SalvarEnderecoModel salvarEnderecoModel) {
     this.logradouro = salvarEnderecoModel.getLogradouro();
     this.cep = salvarEnderecoModel.getCep();
     this.numero = salvarEnderecoModel.getNumero();
+  }
+
+  @PrePersist
+  public void prePersist() {
+    System.out.println("Data de criação atualizada - Endereço");
     this.dataCriacao = dateNow();
+  }
+
+  @PreUpdate
+  public void preUpdate() {
+    System.out.println("Data de atualização atualizada - Endereço");
     this.dataAtualizacao = dateNow();
   }
 

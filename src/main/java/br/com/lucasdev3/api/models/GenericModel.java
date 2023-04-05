@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GenericModel implements Serializable {
+public abstract class GenericModel implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
