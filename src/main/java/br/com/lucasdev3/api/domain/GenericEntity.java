@@ -47,13 +47,12 @@ public class GenericEntity implements Serializable {
 
   @PostPersist
   public void postPersist() {
-    System.out.println("Data de criação atualizada - Pessoas");
     this.dataCriacao = dateNow();
+    this.dataAtualizacao = dateNow();
   }
 
   @PostUpdate
   public void postUpdate() {
-    System.out.println("Data de atualização atualizada - Pessoas");
     this.dataAtualizacao = dateNow();
   }
 

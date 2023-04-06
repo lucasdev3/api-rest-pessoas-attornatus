@@ -61,7 +61,7 @@ Uma Pessoa deve ter os seguintes campos
 * Java 11 Eclipse Adoptium jdk-11.0.17.8-hotspot.
 * Maven 3.8.6.
 * Banco de dados H2 (em memória) versão 1.4.193.
-* Spring Boot 2.7.2
+* Spring Boot 2.7.10
 * SOLID
 * TDD
 * JPA para persistencia e manipulação de dados.
