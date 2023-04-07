@@ -1,16 +1,9 @@
 package br.com.lucasdev3.api.domain;
 
-import static br.com.lucasdev3.api.utils.DateUtils.dateNow;
-
 import br.com.lucasdev3.api.models.endereco.SalvarEnderecoModel;
-import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -40,29 +33,29 @@ public class Endereco extends GenericEntity {
   @Column(name = "enderecoPrincipal")
   private Boolean enderecoPrincipal = false;
 
-  @Column(name = "data_criacao", nullable = false, updatable = false)
-  private String dataCriacao = dateNow();
-
-  @Column(name = "data_atualizacao", nullable = false)
-  private String dataAtualizacao = dateNow();
-
-
   public Endereco(SalvarEnderecoModel salvarEnderecoModel) {
     this.logradouro = salvarEnderecoModel.getLogradouro();
     this.cep = salvarEnderecoModel.getCep();
     this.numero = salvarEnderecoModel.getNumero();
   }
 
-  @PrePersist
-  public void prePersist() {
-    System.out.println("Data de criação atualizada - Endereço");
-    this.dataCriacao = dateNow();
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Endereco endereco = (Endereco) o;
+    return Objects.equals(logradouro, endereco.logradouro) && Objects.equals(cep,
+        endereco.cep) && Objects.equals(numero, endereco.numero)
+        && Objects.equals(enderecoPrincipal, endereco.enderecoPrincipal);
   }
 
-  @PreUpdate
-  public void preUpdate() {
-    System.out.println("Data de atualização atualizada - Endereço");
-    this.dataAtualizacao = dateNow();
+  @Override
+  public int hashCode() {
+    return Objects.hash(logradouro, cep, numero, enderecoPrincipal);
   }
 
 }

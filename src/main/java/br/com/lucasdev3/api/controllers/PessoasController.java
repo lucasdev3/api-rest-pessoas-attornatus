@@ -43,7 +43,8 @@ public class PessoasController {
   }
 
   @GetMapping("/enderecos/{pessoaId}")
-  public ResponseEntity<ResponseModel<Map<String, List<Endereco>>>> buscaEnderecos(@PathVariable Long pessoaId) {
+  public ResponseEntity<ResponseModel<Map<String, List<Endereco>>>> buscaEnderecos(
+      @PathVariable Long pessoaId) {
     return ResponseEntity.ok(new ResponseModel<>(this.pessoaService.buscaEnderecos(pessoaId)));
   }
 
@@ -60,7 +61,8 @@ public class PessoasController {
       @Valid @RequestBody SalvarPessoaModel salvarPessoaModel,
       @PathVariable Long id) {
     this.pessoaService.atualizar(salvarPessoaModel, id);
-    return new ResponseEntity<>(new ResponseModel<>("Pessoa atualizada com sucesso!"), HttpStatus.OK);
+    return new ResponseEntity<>(new ResponseModel<>("Pessoa atualizada com sucesso!"),
+        HttpStatus.OK);
   }
 
   @PutMapping("/adicionar-endereco/{id}")

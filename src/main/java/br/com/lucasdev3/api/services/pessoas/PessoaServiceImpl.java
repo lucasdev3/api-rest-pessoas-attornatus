@@ -3,7 +3,6 @@ package br.com.lucasdev3.api.services.pessoas;
 import br.com.lucasdev3.api.domain.Endereco;
 import br.com.lucasdev3.api.domain.Pessoa;
 import br.com.lucasdev3.api.exceptions.NotFoundException;
-import br.com.lucasdev3.api.models.GenericModel;
 import br.com.lucasdev3.api.models.endereco.SalvarEnderecoModel;
 import br.com.lucasdev3.api.models.pessoas.ListarPessoaModel;
 import br.com.lucasdev3.api.models.pessoas.SalvarPessoaModel;

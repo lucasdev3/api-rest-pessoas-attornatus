@@ -17,6 +17,11 @@ public class ConstrucaoPessoa {
     return new Pessoa(salvarPessoaModel);
   }
 
+  public static Pessoa createPessoaWithoutAddress() {
+    SalvarPessoaModel salvarPessoaModel = new SalvarPessoaModel("Lucas", "20/06/1996", null);
+    return new Pessoa(salvarPessoaModel);
+  }
+
   public static Pessoa createPessoaVazia() {
     SalvarEnderecoModel enderecoModel1 = new SalvarEnderecoModel(null, null, null,
         false);

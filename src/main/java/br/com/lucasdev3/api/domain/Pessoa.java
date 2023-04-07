@@ -3,7 +3,6 @@ package br.com.lucasdev3.api.domain;
 import static br.com.lucasdev3.api.utils.DateUtils.dateNow;
 
 import br.com.lucasdev3.api.models.pessoas.SalvarPessoaModel;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +10,6 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PostPersist;
 import javax.persistence.PostUpdate;
@@ -30,7 +26,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Pessoa extends GenericEntity{
+public class Pessoa extends GenericEntity {
 
   @Column(name = "nome", unique = true)
   @NotBlank(message = "nome é obrigatorio")
@@ -50,7 +46,6 @@ public class Pessoa extends GenericEntity{
 
   @Column(name = "data_atualizacao", nullable = false)
   private String dataAtualizacao = dateNow();
-  ;
 
 
   public Pessoa(SalvarPessoaModel dto) {
@@ -86,12 +81,24 @@ public class Pessoa extends GenericEntity{
       return false;
     }
     Pessoa pessoa = (Pessoa) o;
-    return Objects.equals(enderecos, pessoa.enderecos);
+    return Objects.equals(nome, pessoa.nome) && Objects.equals(dataNascimento,
+        pessoa.dataNascimento) && Objects.equals(enderecos, pessoa.enderecos)
+        && Objects.equals(dataCriacao, pessoa.dataCriacao) && Objects.equals(
+        dataAtualizacao, pessoa.dataAtualizacao);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(enderecos);
+    return Objects.hash(nome, dataNascimento, enderecos, dataCriacao, dataAtualizacao);
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "(" +
+        "id = " + getId() + ", " +
+        "nome = " + getNome() + ", " +
+        "dataNascimento = " + getDataNascimento() + ", " +
+        "dataCriacao = " + getDataCriacao() + ", " +
+        "dataAtualizacao = " + getDataAtualizacao() + ")";
+  }
 }
