@@ -82,7 +82,7 @@ public class PessoasController {
         HttpStatus.OK);
   }
 
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/deletar/{id}")
   public ResponseEntity<ResponseModel<String>> deletar(@PathVariable Long id) {
     this.pessoaService.deletar(id);
     return new ResponseEntity<>(new ResponseModel<>("Pessoa deletada"), HttpStatus.OK);

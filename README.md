@@ -69,7 +69,8 @@ Uma Pessoa deve ter os seguintes campos
   'MethodArgumentNotValidException'.
 * Swagger para documentação e testes de requisições na API disponivel na
   url: http://localhost:8080/swagger-ui/
-* JUnit para testes unitários
+* JUnit e Mockito para testes unitários e de integração.
+
 
 #### Pontos de atenção
 
@@ -108,26 +109,25 @@ http://localhost:8080/swagger-ui/
   * JSON a ser enviado:
       ```
       {
-          "nome": "Teste 1",
-          "dataNascimento": "10/04/2020",
-          "enderecos": [
-              {
-                  "logradouro": "teste4",
-                  "cep": "12440-230",
-                  "numero": "44",
-              },
-              {
-                  "logradouro": "teste454545",
-                  "cep": "12440-230",
-                  "numero": "44",
-              }
-          ]
+        "nome": "Teste 1",
+        "dataNascimento": "10/04/2020",
+        "enderecos": [
+            {
+                "logradouro": "teste4",
+                "cep": "12440-230",
+                "numero": "44"
+            },
+            {
+                "logradouro": "teste454545",
+                "cep": "12440-230",
+                "numero": "44"
+            }
+        ]
       }
       ```
     * JSON de resposta — Exemplo de sucesso (201 - CREATED):
         ```
         {
-          "date": "01/04/2023 14:23:10:986",
           "data": "Pessoa criada com sucesso!"
         }
         ```
@@ -145,42 +145,49 @@ http://localhost:8080/swagger-ui/
 * Retorno:
   ```
   {
-    "date": "01/04/2023 14:23:52:863",
     "data": [
-      {
-        "id": 1,
-        "nome": "Teste 1",
-        "dataNascimento": "10/04/2020",
-        "enderecos": [
-          {
+        {
             "id": 1,
-            "logradouro": "teste4",
-            "cep": "12440-230",
-            "numero": "44",
-            "enderecoPrincipal": true,
-            "dataCriacao": "01/04/2023 14:23:10:970",
-            "dataAtualizacao": "01/04/2023 14:23:10:970"
-          },
-          {
+            "nome": "kkkkk666 kkkkk",
+            "dataNascimento": "10/04/2020",
+            "enderecos": [
+                {
+                    "id": 1,
+                    "logradouro": "teste4",
+                    "cep": "12440-230",
+                    "numero": "44",
+                    "enderecoPrincipal": false
+                }
+            ]
+        },
+        {
             "id": 2,
-            "logradouro": "teste454545",
-            "cep": "12440-230",
-            "numero": "44",
-            "enderecoPrincipal": false,
-            "dataCriacao": "01/04/2023 14:23:29:745",
-            "dataAtualizacao": "01/04/2023 14:23:29:745"
-          }
-        ],
-        "dataCriacao": "01/04/2023 14:23:10:972",
-        "dataAtualizacao": "01/04/2023 14:23:10:972"
-      }
+            "nome": "Teste 1",
+            "dataNascimento": "10/04/2020",
+            "enderecos": [
+                {
+                    "id": 2,
+                    "logradouro": "teste4",
+                    "cep": "12440-230",
+                    "numero": "44",
+                    "enderecoPrincipal": false
+                },
+                {
+                    "id": 3,
+                    "logradouro": "teste454545",
+                    "cep": "12440-230",
+                    "numero": "44",
+                    "enderecoPrincipal": false
+                }
+            ]
+        }
     ]
   }
   ```
   
 #### Exemplo no banco de dados
 
-#![img.png](img.png)
+![img_3.png](img_3.png)
 
 
 

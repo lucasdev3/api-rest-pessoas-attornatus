@@ -1,14 +1,17 @@
 package br.com.lucasdev3.api.controllers;
 
 import static br.com.lucasdev3.api.utils.ConstrucaoPessoa.createPessoa;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.com.lucasdev3.api.domain.Pessoa;
 import br.com.lucasdev3.api.repositories.PessoaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -78,20 +81,9 @@ class PessoasControllerTest {
   @Test
   @DisplayName("Deverá salvar pessoa e retornar um status 201")
   public void salvar_pessoa_retorna_created() throws Exception {
-//    Mockito.when(pessoaRepository.save(Mockito.any())).thenReturn(createPessoa());
     this.mockMvc.perform(post("/pessoas/salvar")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\n"
-                + "    \"nome\": \"kkkkk666 kkkkk\",\n"
-                + "    \"dataNascimento\": \"10/04/2020\",\n"
-                + "    \"enderecos\": [\n"
-                + "        {\n"
-                + "            \"logradouro\": \"teste4\",\n"
-                + "            \"cep\": \"12440-230\",\n"
-                + "            \"numero\": \"44\"\n"
-                + "        }\n"
-                + "    ]\n"
-                + "}")
+            .content(new ObjectMapper().writeValueAsString(createPessoa()))
             .accept(MediaType.APPLICATION_JSON)
         )
         .andDo(print())
@@ -102,20 +94,12 @@ class PessoasControllerTest {
   @DisplayName("Deverá salvar pessoa e retornar um status 406")
   public void salvar_pessoa_pattern_dataNascimento_invalido_retorna_notAcceptable()
       throws Exception {
-//    Mockito.when(pessoaRepository.save(Mockito.any())).thenReturn(createPessoa());
+    Pessoa pessoa = createPessoa();
+    // Setando pattern invalido
+    pessoa.setDataNascimento("20-06-1990");
     this.mockMvc.perform(post("/pessoas/salvar")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\n"
-                + "    \"nome\": \"kkkkk666 kkkkk\",\n"
-                + "    \"dataNascimento\": \"10-04-2020\",\n"
-                + "    \"enderecos\": [\n"
-                + "        {\n"
-                + "            \"logradouro\": \"teste4\",\n"
-                + "            \"cep\": \"12440-230\",\n"
-                + "            \"numero\": \"44\"\n"
-                + "        }\n"
-                + "    ]\n"
-                + "}")
+            .content(new ObjectMapper().writeValueAsString(pessoa))
             .accept(MediaType.APPLICATION_JSON)
         )
         .andDo(print())
@@ -126,26 +110,82 @@ class PessoasControllerTest {
   @Test
   @DisplayName("Deverá salvar pessoa e retornar um status 406")
   public void salvar_pessoa_ano_dataNascimento_invalida_retorna_notAcceptable() throws Exception {
-//    Mockito.when(pessoaRepository.save(Mockito.any())).thenReturn(createPessoa());
+    Pessoa pessoa = createPessoa();
+    pessoa.setDataNascimento("20/06/2050");
     this.mockMvc.perform(post("/pessoas/salvar")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\n"
-                + "    \"nome\": \"kkkkk666 kkkkk\",\n"
-                + "    \"dataNascimento\": \"10/04/2099\",\n"
-                + "    \"enderecos\": [\n"
-                + "        {\n"
-                + "            \"logradouro\": \"teste4\",\n"
-                + "            \"cep\": \"12440-230\",\n"
-                + "            \"numero\": \"44\"\n"
-                + "        }\n"
-                + "    ]\n"
-                + "}")
+            .content(new ObjectMapper().writeValueAsString(pessoa))
             .accept(MediaType.APPLICATION_JSON)
         )
         .andDo(print())
         .andExpect(content().json(
             "{\"status\":406,\"message\":\"Data de nascimento deve ser menor que a data corrente!\"}"))
         .andExpect(status().isNotAcceptable());
+  }
+
+  @Test
+  @DisplayName("Deverá atualizar pessoa e retornar um status 200")
+  public void atualizar_pessoa_retorna_ok() throws Exception {
+    Pessoa pessoa = createPessoa();
+    pessoa.setId(1L);
+    pessoa.setNome("teste update");
+    Mockito.when(pessoaRepository.findById(1L)).thenReturn(Optional.of(pessoa));
+    this.mockMvc.perform(put("/pessoas/atualizar/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsString(pessoa))
+            .accept(MediaType.APPLICATION_JSON)
+        )
+        .andDo(print())
+        .andExpect(content().json(
+            "{\"data\":\"Pessoa atualizada com sucesso!\"}"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("Deverá atualizar pessoa e retornar um status 404")
+  public void atualizar_pessoa_retorna_notFound() throws Exception {
+    Pessoa pessoa = createPessoa();
+    pessoa.setId(1L);
+    Mockito.when(pessoaRepository.findById(1L)).thenReturn(Optional.empty());
+    this.mockMvc.perform(put("/pessoas/atualizar/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsString(pessoa))
+            .accept(MediaType.APPLICATION_JSON)
+        )
+        .andDo(print())
+        .andExpect(content().json("{\"status\":404,\"message\":\"Nenhuma pessoa encontrada!\"}"))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @DisplayName("Deverá deletar pessoa e retornar um status 200")
+  public void deleta_pessoa_retorna_ok() throws Exception {
+    Pessoa pessoa = createPessoa();
+    pessoa.setId(1L);
+    Mockito.when(pessoaRepository.findById(1L)).thenReturn(Optional.of(pessoa));
+    this.mockMvc.perform(delete("/pessoas/deletar/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+        .andDo(print())
+        .andExpect(content().json(
+            "{\"data\":\"Pessoa deletada\"}"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("Deverá deletar pessoa e retornar um status 404")
+  public void deleta_pessoa_retorna_404() throws Exception {
+    Pessoa pessoa = createPessoa();
+    pessoa.setId(1L);
+    Mockito.when(pessoaRepository.findById(1L)).thenReturn(Optional.empty());
+    this.mockMvc.perform(delete("/pessoas/deletar/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+        .andDo(print())
+        .andExpect(content().json("{\"status\":404,\"message\":\"Nenhuma pessoa encontrada!\"}"))
+        .andExpect(status().isNotFound());
   }
 
 }
